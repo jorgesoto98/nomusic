@@ -1,0 +1,49 @@
+#!/bin/bash
+# postinstall — runs as root after .pkg payload is extracted
+# Binary is already at /usr/local/bin/nomusic (installed by pkg payload)
+# This script creates the LaunchAgent plist and starts the service
+
+CONSOLE_USER=$(stat -f "%Su" /dev/console)
+CONSOLE_HOME=$(dscl . -read /Users/"$CONSOLE_USER" NFSHomeDirectory | awk '{print $2}')
+CONSOLE_UID=$(id -u "$CONSOLE_USER")
+
+AGENTS_DIR="$CONSOLE_HOME/Library/LaunchAgents"
+PLIST_NAME="com.isdelnorte.nomusic.plist"
+
+mkdir -p "$AGENTS_DIR"
+
+cat > "$AGENTS_DIR/$PLIST_NAME" << 'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.isdelnorte.nomusic</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/nomusic</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/dev/null</string>
+    <key>StandardErrorPath</key>
+    <string>/dev/null</string>
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
+PLIST
+
+chown "$CONSOLE_USER" "$AGENTS_DIR/$PLIST_NAME"
+
+launchctl bootstrap "gui/$CONSOLE_UID" "$AGENTS_DIR/$PLIST_NAME"
+
+sleep 1
+if launchctl print "gui/$CONSOLE_UID/com.isdelnorte.nomusic" &>/dev/null; then
+    exit 0
+else
+    exit 1
+fi

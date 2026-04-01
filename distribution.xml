@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>NoMusic</title>
+    <welcome file="welcome.html"/>
+    <options customize="never" require-scripts="false" hostArchitectures="x86_64,arm64"/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="10.15"/>
+        </allowed-os-versions>
+    </volume-check>
+    <choices-outline>
+        <line choice="default">
+            <line choice="com.isdelnorte.nomusic"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="com.isdelnorte.nomusic" visible="false">
+        <pkg-ref id="com.isdelnorte.nomusic"/>
+    </choice>
+    <pkg-ref id="com.isdelnorte.nomusic" version="1.0.0" onConclusion="none">NoMusic-component.pkg</pkg-ref>
+</installer-gui-script>

@@ -14,13 +14,23 @@ When you press Play/Pause without an audio app open, macOS launches Apple Music 
 
 Uses `NSWorkspace.willLaunchApplicationNotification` — a native macOS event that fires **before** Apple Music finishes launching. It's event-driven: **zero CPU at idle**, no polling or timers.
 
+### Quick Install (recommended)
+
+1. **Download** the latest `NoMusic.pkg` from [Releases](https://github.com/jorgesoto98/nomusic/releases)
+2. **Double-click** the `.pkg` file
+3. **Follow the installer** — click "Install" and enter your password
+4. Done — NoMusic is running in the background
+
+To uninstall, open **NoMusic Uninstaller** from your Applications folder.
+
 ### Requirements
 
-- macOS Sequoia (15.x) or later (Apple Silicon)
+- macOS Catalina (10.15) or later
 - Spotify installed
-- Xcode Command Line Tools
 
-### Installation
+### Manual Install (for developers)
+
+Requires [Xcode Command Line Tools](https://developer.apple.com/xcode/resources/).
 
 1. **Install Xcode Command Line Tools** (skip if you already have them):
 
@@ -96,13 +106,23 @@ Cuando presionas Play/Pause sin una app de audio abierta, macOS abre Apple Music
 
 Usa `NSWorkspace.willLaunchApplicationNotification` — un evento nativo de macOS que se dispara **antes** de que Apple Music termine de abrir. Es event-driven: **zero CPU en idle**, sin polling ni timers.
 
+### Instalacion rapida (recomendada)
+
+1. **Descarga** el ultimo `NoMusic.pkg` de [Releases](https://github.com/jorgesoto98/nomusic/releases)
+2. **Doble-click** en el archivo `.pkg`
+3. **Sigue el instalador** — click en "Instalar" e ingresa tu contrasena
+4. Listo — NoMusic esta corriendo en segundo plano
+
+Para desinstalar, abre **NoMusic Uninstaller** desde tu carpeta de Aplicaciones.
+
 ### Requisitos
 
-- macOS Sequoia (15.x) o superior (Apple Silicon)
+- macOS Catalina (10.15) o superior
 - Spotify instalado
-- Xcode Command Line Tools
 
-### Instalacion
+### Instalacion manual (para desarrolladores)
+
+Requiere [Xcode Command Line Tools](https://developer.apple.com/xcode/resources/).
 
 1. **Instalar Xcode Command Line Tools** (omitir si ya los tienes):
 

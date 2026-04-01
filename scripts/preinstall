@@ -1,0 +1,10 @@
+#!/bin/bash
+# preinstall — runs as root before .pkg payload is extracted
+# Stops existing NoMusic LaunchAgent if present
+
+CONSOLE_USER=$(stat -f "%Su" /dev/console)
+CONSOLE_UID=$(id -u "$CONSOLE_USER")
+
+launchctl bootout "gui/$CONSOLE_UID/com.isdelnorte.nomusic" 2>/dev/null || true
+
+exit 0

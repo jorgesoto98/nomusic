@@ -1,0 +1,25 @@
+#!/bin/bash
+# NoMusic Uninstaller
+# Double-click this .app to remove NoMusic completely
+
+CONSOLE_USER=$(stat -f "%Su" /dev/console)
+CONSOLE_UID=$(id -u "$CONSOLE_USER")
+CONSOLE_HOME=$(dscl . -read /Users/"$CONSOLE_USER" NFSHomeDirectory | awk '{print $2}')
+
+RESPONSE=$(osascript -e 'display dialog "Do you want to uninstall NoMusic?\n\nThis will stop the background service and remove all files." buttons {"Cancel", "Uninstall"} default button "Cancel" with icon caution with title "NoMusic Uninstaller"' 2>&1)
+
+if [[ "$RESPONSE" != *"Uninstall"* ]]; then
+    exit 0
+fi
+
+launchctl bootout "gui/$CONSOLE_UID/com.isdelnorte.nomusic" 2>/dev/null || true
+
+rm -f "$CONSOLE_HOME/Library/LaunchAgents/com.isdelnorte.nomusic.plist"
+
+osascript -e 'do shell script "rm -f /usr/local/bin/nomusic && rm -rf /Applications/NoMusic\\ Uninstaller.app" with administrator privileges' 2>/dev/null
+
+if [ $? -eq 0 ]; then
+    osascript -e 'display dialog "NoMusic has been uninstalled successfully." buttons {"OK"} default button "OK" with title "NoMusic Uninstaller"'
+else
+    osascript -e 'display dialog "Uninstallation was cancelled or failed.\nThe LaunchAgent has been stopped but files may remain." buttons {"OK"} default button "OK" with icon caution with title "NoMusic Uninstaller"'
+fi
