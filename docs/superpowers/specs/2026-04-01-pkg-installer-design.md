@@ -39,13 +39,16 @@ Script que orquesta todo el proceso de build:
 9. Firma el `.pkg` con `productsign` (Developer ID Installer)
 10. Notariza con `notarytool submit` + `stapler staple`
 
-**Parámetros requeridos (variables de entorno, nunca en el repo):**
+**Parámetros (variables de entorno, nunca en el repo):**
 - `DEVELOPER_ID_APP` — identidad de firma para binarios (ej: "Developer ID Application: Nombre (TEAMID)")
 - `DEVELOPER_ID_INSTALLER` — identidad de firma para .pkg (ej: "Developer ID Installer: Nombre (TEAMID)")
-- `APPLE_ID` — Apple ID para notarización
-- `TEAM_ID` — Team ID de Apple Developer
-- `APP_PASSWORD` — App-specific password para notarytool
+- `NOTARY_PROFILE` — opcional, perfil del llavero para notarizar, por omisión `nomusic-notary`
 - `VERSION` — opcional, por omisión `1.0.0`
+
+**Credenciales de notarización:** viven en el llavero de inicio de sesión, no en `.env`. El
+perfil se crea una vez con `xcrun notarytool store-credentials nomusic-notary --apple-id <email>
+--team-id <TEAMID>` (pide la contraseña de app sin mostrarla y la valida con Apple).
+`build-pkg.sh` comprueba el perfil antes de compilar y se detiene si no existe.
 
 **Output:** `build/NoMusic-<version>.pkg`
 
@@ -154,12 +157,12 @@ apple_spotify_button/
 # Revisiones rápidas (sin credenciales)
 ./test.sh
 
-# Configurar variables (en la shell o en .env, que está en .gitignore)
+# Una sola vez por Mac: guardar las credenciales de notarización en el llavero
+xcrun notarytool store-credentials nomusic-notary --apple-id <email> --team-id <TEAMID>
+
+# Identidades de firma (en la shell o en .env, que está en .gitignore)
 export DEVELOPER_ID_APP="Developer ID Application: Nombre (XXXXXXXXXX)"
 export DEVELOPER_ID_INSTALLER="Developer ID Installer: Nombre (XXXXXXXXXX)"
-export APPLE_ID="..."
-export TEAM_ID="XXXXXXXXXX"
-export APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"
 
 # Generar .pkg firmado y notarizado
 VERSION=X.Y.Z ./build-pkg.sh
@@ -179,4 +182,5 @@ VERSION=X.Y.Z ./build-pkg.sh
 ## Historial
 
 - **2026-04-01 (1.0.0):** diseño original. `postinstall` escribía el plist en `~/Library/LaunchAgents` del usuario con sesión abierta, con una copia de los ajustes dentro del script. Fallaba si nadie había iniciado sesión. Implementado según `plans/2026-04-01-pkg-installer.md`.
-- **2026-10-09:** el plist pasa al payload en `/Library/LaunchAgents` desde la plantilla compartida; `preinstall` limpia la instalación por usuario de la 1.0.x; el desinstalador borra el plist del sistema y el recibo; se agrega `test.sh`.
+- **2026-10-09:** el plist pasa al payload en `/Library/LaunchAgents` desde la plantilla compartida; `preinstall` limpia la instalación por usuario de la 1.0.x; el desinstalador borra el plist del sistema y el recibo; se agrega `test.sh`. La contraseña de notarización pasa de `.env` al llavero
+(perfil `nomusic-notary`).
