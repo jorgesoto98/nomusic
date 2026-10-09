@@ -1,5 +1,15 @@
 .claude/
-nomusic
-build/
-.env
 .DS_Store
+
+# Credenciales
+.env*
+!.env.example
+*.p12
+*.p8
+*.cer
+*.certSigningRequest
+
+# Artefactos de build
+/nomusic
+build/
+*.pkg
