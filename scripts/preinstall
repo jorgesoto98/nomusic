@@ -1,10 +1,15 @@
 #!/bin/bash
 # preinstall — runs as root before .pkg payload is extracted
-# Stops existing NoMusic LaunchAgent if present
+# Stops any running NoMusic agent and removes the per-user plist left by 1.0.x
+# (which installed into ~/Library/LaunchAgents instead of /Library/LaunchAgents).
 
-CONSOLE_USER=$(stat -f "%Su" /dev/console)
-CONSOLE_UID=$(id -u "$CONSOLE_USER")
+LABEL="com.isdelnorte.nomusic"
 
-launchctl bootout "gui/$CONSOLE_UID/com.isdelnorte.nomusic" 2>/dev/null || true
+for HOME_DIR in /Users/*; do
+    USER_NAME=$(basename "$HOME_DIR")
+    USER_UID=$(id -u "$USER_NAME" 2>/dev/null) || continue
+    launchctl bootout "gui/$USER_UID/$LABEL" 2>/dev/null || true
+    rm -f "$HOME_DIR/Library/LaunchAgents/$LABEL.plist"
+done
 
 exit 0

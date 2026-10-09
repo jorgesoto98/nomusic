@@ -2,3 +2,4 @@
 nomusic
 build/
 .env
+.DS_Store

@@ -14,9 +14,10 @@ fi
 
 launchctl bootout "gui/$CONSOLE_UID/com.isdelnorte.nomusic" 2>/dev/null || true
 
+# Per-user plist left by 1.0.x
 rm -f "$CONSOLE_HOME/Library/LaunchAgents/com.isdelnorte.nomusic.plist"
 
-osascript -e 'do shell script "rm -f /usr/local/bin/nomusic && rm -rf /Applications/NoMusic\\ Uninstaller.app" with administrator privileges' 2>/dev/null
+osascript -e 'do shell script "rm -f /usr/local/bin/nomusic /Library/LaunchAgents/com.isdelnorte.nomusic.plist && rm -rf /Applications/NoMusic\\ Uninstaller.app && (pkgutil --forget com.isdelnorte.nomusic >/dev/null 2>&1 || true)" with administrator privileges' 2>/dev/null
 
 if [ $? -eq 0 ]; then
     osascript -e 'display dialog "NoMusic has been uninstalled successfully." buttons {"OK"} default button "OK" with title "NoMusic Uninstaller"'

@@ -6,7 +6,7 @@
     <string>com.isdelnorte.nomusic</string>
     <key>ProgramArguments</key>
     <array>
-        <string>${HOME}/.local/bin/nomusic</string>
+        <string>__NOMUSIC_BIN__</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

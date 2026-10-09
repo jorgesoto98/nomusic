@@ -19,7 +19,7 @@ echo "==> Building NoMusic $VERSION"
 
 # ─── Clean ────────────────────────────────────────────────────────
 rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR" "$STAGING/usr/local/bin" "$PKG_SCRIPTS"
+mkdir -p "$BUILD_DIR" "$STAGING/usr/local/bin" "$STAGING/Library/LaunchAgents" "$PKG_SCRIPTS"
 
 # ─── Compile universal binary ─────────────────────────────────────
 echo "==> Compiling arm64..."
@@ -42,6 +42,11 @@ codesign --sign "$DEVELOPER_ID_APP" \
     --entitlements "$SCRIPT_DIR/entitlements.plist" \
     --timestamp \
     "$STAGING/usr/local/bin/nomusic"
+
+# ─── LaunchAgent (system-wide, from the shared template) ──────────
+sed "s|__NOMUSIC_BIN__|/usr/local/bin/nomusic|" "$SCRIPT_DIR/$IDENTIFIER.plist" \
+    > "$STAGING/Library/LaunchAgents/$IDENTIFIER.plist"
+chmod 644 "$STAGING/Library/LaunchAgents/$IDENTIFIER.plist"
 
 # ─── Build Uninstaller.app ────────────────────────────────────────
 echo "==> Building Uninstaller.app..."
