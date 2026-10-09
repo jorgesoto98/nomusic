@@ -48,6 +48,22 @@ check_plist "/usr/local/bin/nomusic" pkg
 check_plist "$HOME/.local/bin/nomusic" manual
 if grep -q '__NOMUSIC_BIN__' "$SCRIPT_DIR/$LABEL.plist"; then pass "template has the __NOMUSIC_BIN__ marker"; else fail "template lost the __NOMUSIC_BIN__ marker"; fi
 
+echo "==> Version stamping"
+sed "s|__VERSION__|9.9.9|" "$SCRIPT_DIR/distribution.xml" > "$TMP/distribution.xml"
+if xmllint --noout "$TMP/distribution.xml" 2>/dev/null && grep -q 'version="9.9.9"' "$TMP/distribution.xml"; then
+    pass "distribution.xml takes VERSION"
+else
+    fail "distribution.xml lost the __VERSION__ marker or is invalid XML"
+fi
+cp "$SCRIPT_DIR/uninstaller/Info.plist" "$TMP/Info.plist"
+plutil -replace CFBundleVersion -string 9.9.9 "$TMP/Info.plist" 2>/dev/null
+plutil -replace CFBundleShortVersionString -string 9.9.9 "$TMP/Info.plist" 2>/dev/null
+if plutil -lint -s "$TMP/Info.plist" && ! grep -q '__VERSION__' "$TMP/Info.plist"; then
+    pass "uninstaller Info.plist takes VERSION"
+else
+    fail "uninstaller Info.plist is invalid or keeps a __VERSION__ marker"
+fi
+
 echo "==> Package payload (unsigned)"
 # Mirrors the staging layout of build-pkg.sh.
 ROOT="$TMP/root"

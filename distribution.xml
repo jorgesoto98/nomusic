@@ -17,5 +17,5 @@
     <choice id="com.isdelnorte.nomusic" visible="false">
         <pkg-ref id="com.isdelnorte.nomusic"/>
     </choice>
-    <pkg-ref id="com.isdelnorte.nomusic" version="1.0.0" onConclusion="none">NoMusic-component.pkg</pkg-ref>
+    <pkg-ref id="com.isdelnorte.nomusic" version="__VERSION__" onConclusion="none">NoMusic-component.pkg</pkg-ref>
 </installer-gui-script>

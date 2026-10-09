@@ -43,7 +43,7 @@ Script que orquesta todo el proceso de build:
 - `DEVELOPER_ID_APP` — identidad de firma para binarios (ej: "Developer ID Application: Nombre (TEAMID)")
 - `DEVELOPER_ID_INSTALLER` — identidad de firma para .pkg (ej: "Developer ID Installer: Nombre (TEAMID)")
 - `NOTARY_PROFILE` — opcional, perfil del llavero para notarizar, por omisión `isdelnorte-notary`
-- `VERSION` — opcional, por omisión `1.0.0`
+- `VERSION` — opcional, por omisión `1.1.0`. Es la única fuente del número de versión: `build-pkg.sh` lo pone en `distribution.xml` y en el `Info.plist` del desinstalador, que en el repo llevan el marcador `__VERSION__`
 
 **Credenciales de notarización:** viven en el llavero de inicio de sesión, no en `.env`. El
 perfil `isdelnorte-notary` usa la llave de la API de App Store Connect (`.p8`, en

@@ -2,7 +2,7 @@
 set -e
 
 # ─── Configuration ───────────────────────────────────────────────
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-1.1.0}"
 IDENTIFIER="com.isdelnorte.nomusic"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BUILD_DIR="$SCRIPT_DIR/build"
@@ -60,6 +60,8 @@ echo "==> Building Uninstaller.app..."
 UNINSTALLER="$STAGING/Applications/NoMusic Uninstaller.app/Contents"
 mkdir -p "$UNINSTALLER/MacOS"
 cp "$SCRIPT_DIR/uninstaller/Info.plist" "$UNINSTALLER/Info.plist"
+plutil -replace CFBundleVersion -string "$VERSION" "$UNINSTALLER/Info.plist"
+plutil -replace CFBundleShortVersionString -string "$VERSION" "$UNINSTALLER/Info.plist"
 cp "$SCRIPT_DIR/uninstaller/uninstall" "$UNINSTALLER/MacOS/uninstall"
 chmod +x "$UNINSTALLER/MacOS/uninstall"
 
@@ -87,8 +89,9 @@ pkgbuild \
 
 # ─── Build distribution pkg ───────────────────────────────────────
 echo "==> Building distribution package..."
+sed "s|__VERSION__|$VERSION|" "$SCRIPT_DIR/distribution.xml" > "$BUILD_DIR/distribution.xml"
 productbuild \
-    --distribution "$SCRIPT_DIR/distribution.xml" \
+    --distribution "$BUILD_DIR/distribution.xml" \
     --resources "$SCRIPT_DIR/pkg-resources" \
     --package-path "$BUILD_DIR" \
     "$BUILD_DIR/NoMusic-unsigned.pkg"
@@ -112,7 +115,7 @@ xcrun stapler staple "$BUILD_DIR/NoMusic-$VERSION.pkg"
 # ─── Cleanup intermediates ────────────────────────────────────────
 rm -rf "$STAGING" "$PKG_SCRIPTS"
 rm -f "$BUILD_DIR/nomusic-arm64" "$BUILD_DIR/nomusic-x86_64"
-rm -f "$BUILD_DIR/NoMusic-component.pkg" "$BUILD_DIR/NoMusic-unsigned.pkg"
+rm -f "$BUILD_DIR/NoMusic-component.pkg" "$BUILD_DIR/NoMusic-unsigned.pkg" "$BUILD_DIR/distribution.xml"
 
 echo ""
 echo "==> Done! Package ready at: build/NoMusic-$VERSION.pkg"
