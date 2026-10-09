@@ -42,14 +42,14 @@ Script que orquesta todo el proceso de build:
 **Parámetros (variables de entorno, nunca en el repo):**
 - `DEVELOPER_ID_APP` — identidad de firma para binarios (ej: "Developer ID Application: Nombre (TEAMID)")
 - `DEVELOPER_ID_INSTALLER` — identidad de firma para .pkg (ej: "Developer ID Installer: Nombre (TEAMID)")
-- `NOTARY_PROFILE` — opcional, perfil del llavero para notarizar, por omisión `nomusic-notary`
+- `NOTARY_PROFILE` — opcional, perfil del llavero para notarizar, por omisión `isdelnorte-notary`
 - `VERSION` — opcional, por omisión `1.0.0`
 
 **Credenciales de notarización:** viven en el llavero de inicio de sesión, no en `.env`. El
-perfil `nomusic-notary` usa la llave de la API de App Store Connect (`.p8`, en
+perfil `isdelnorte-notary` usa la llave de la API de App Store Connect (`.p8`, en
 `~/.appstoreconnect/private_keys/`, respaldada en Bitwarden con su Key ID e Issuer ID), no una
 contraseña de app. Desklot usa el mismo perfil. Se crea una vez por Mac con
-`xcrun notarytool store-credentials nomusic-notary --key <AuthKey.p8> --key-id <KEYID> --issuer <ISSUER_ID>`,
+`xcrun notarytool store-credentials isdelnorte-notary --key <AuthKey.p8> --key-id <KEYID> --issuer <ISSUER_ID>`,
 que valida la llave con Apple antes de guardarla. `build-pkg.sh` comprueba el perfil antes de
 compilar y se detiene si no existe.
 
@@ -161,7 +161,7 @@ apple_spotify_button/
 ./test.sh
 
 # Una sola vez por Mac: guardar la llave de notarización en el llavero
-xcrun notarytool store-credentials nomusic-notary \
+xcrun notarytool store-credentials isdelnorte-notary \
   --key ~/.appstoreconnect/private_keys/AuthKey_<KEYID>.p8 --key-id <KEYID> --issuer <ISSUER_ID>
 
 # Identidades de firma (en la shell o en .env, que está en .gitignore)
@@ -187,5 +187,6 @@ VERSION=X.Y.Z ./build-pkg.sh
 
 - **2026-04-01 (1.0.0):** diseño original. `postinstall` escribía el plist en `~/Library/LaunchAgents` del usuario con sesión abierta, con una copia de los ajustes dentro del script. Fallaba si nadie había iniciado sesión. Implementado según `plans/2026-04-01-pkg-installer.md`.
 - **2026-10-09:** el plist pasa al payload en `/Library/LaunchAgents` desde la plantilla compartida; `preinstall` limpia la instalación por usuario de la 1.0.x; el desinstalador borra el plist del sistema y el recibo; se agrega `test.sh`. La contraseña de notarización pasa de `.env` al llavero
-(perfil `nomusic-notary`), y ese mismo día el perfil pasa a usar la llave `.p8` de la API de
-App Store Connect en lugar de la contraseña de app.
+y ese mismo día el perfil pasa a usar la llave `.p8` de la API de App Store Connect en lugar de
+la contraseña de app. Se llamó primero `nomusic-notary` y se renombró a `isdelnorte-notary`
+porque lo comparten todas las apps (NoMusic y Desklot).

@@ -13,9 +13,9 @@ PKG_SCRIPTS="$BUILD_DIR/pkg-scripts"
 : "${DEVELOPER_ID_INSTALLER:?Set DEVELOPER_ID_INSTALLER (e.g. 'Developer ID Installer: Name (TEAMID)')}"
 # Notarization credentials live in the login Keychain, never in .env. Create the profile once
 # with the App Store Connect API key (.p8), which is also backed up outside this Mac:
-#   xcrun notarytool store-credentials nomusic-notary \
+#   xcrun notarytool store-credentials isdelnorte-notary \
 #     --key ~/.appstoreconnect/private_keys/AuthKey_<KEYID>.p8 --key-id <KEYID> --issuer <ISSUER_ID>
-NOTARY_PROFILE="${NOTARY_PROFILE:-nomusic-notary}"
+NOTARY_PROFILE="${NOTARY_PROFILE:-isdelnorte-notary}"
 if ! xcrun notarytool history --keychain-profile "$NOTARY_PROFILE" &>/dev/null; then
     echo "Error: Keychain profile '$NOTARY_PROFILE' not found or invalid. Create it with:" >&2
     echo "  xcrun notarytool store-credentials $NOTARY_PROFILE --key <AuthKey.p8> --key-id <KEYID> --issuer <ISSUER_ID>" >&2
