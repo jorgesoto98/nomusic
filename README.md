@@ -93,6 +93,7 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.isdelnorte.nomusic.p
 | `install.sh` | Compiles and installs the binary + LaunchAgent |
 | `uninstall.sh` | Removes everything cleanly |
 | `com.isdelnorte.nomusic.plist` | LaunchAgent template |
+| `test.sh` | Pre-release checks: compile, script syntax, plist template, pkg payload |
 
 ---
 
@@ -185,3 +186,4 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.isdelnorte.nomusic.p
 | `install.sh` | Compila e instala el binario + LaunchAgent |
 | `uninstall.sh` | Elimina todo limpiamente |
 | `com.isdelnorte.nomusic.plist` | Template del LaunchAgent |
+| `test.sh` | Revisiones antes de publicar: compilacion, sintaxis de scripts, plantilla del plist, contenido del pkg |
