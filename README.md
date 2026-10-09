@@ -74,7 +74,7 @@ chmod +x uninstall.sh
 | Problem | Solution |
 |---------|----------|
 | `xcode-select: error` | Run `xcode-select --install` and wait for the download |
-| Installer says "failed to start" | Check if Spotify is installed in `/Applications/Spotify.app` |
+| Installer says "failed to start" | Check the agent status with `launchctl print gui/$(id -u)/com.isdelnorte.nomusic` |
 | Apple Music still opens | Run `launchctl print gui/$(id -u)/com.isdelnorte.nomusic` to check status |
 | Want to see logs | Edit `~/Library/LaunchAgents/com.isdelnorte.nomusic.plist`, change `StandardErrorPath` from `/dev/null` to `/tmp/nomusic.log`, then restart the agent (see below) |
 
@@ -166,7 +166,7 @@ chmod +x uninstall.sh
 | Problema | Solucion |
 |----------|----------|
 | `xcode-select: error` | Ejecuta `xcode-select --install` y espera a que descargue |
-| El instalador dice "failed to start" | Verifica que Spotify este instalado en `/Applications/Spotify.app` |
+| El instalador dice "failed to start" | Revisa el estado del agente con `launchctl print gui/$(id -u)/com.isdelnorte.nomusic` |
 | Apple Music sigue abriendose | Ejecuta `launchctl print gui/$(id -u)/com.isdelnorte.nomusic` para ver el estado |
 | Quieres ver logs | Edita `~/Library/LaunchAgents/com.isdelnorte.nomusic.plist`, cambia `StandardErrorPath` de `/dev/null` a `/tmp/nomusic.log`, y reinicia el agente (ver abajo) |
 
